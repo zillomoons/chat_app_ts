@@ -5,6 +5,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { FormContainer } from '../register/RegisterStyles';
 import logo from '../../assets/logo.svg';
 import { loginUser } from '../../utils/api-routes';
+import { restoreState, saveState } from '../../utils/localStorage';
 
 type FormValues = {
   username: string;
@@ -16,7 +17,7 @@ export const Login = () => {
   const navigate = useNavigate();
   const [loginError, setLoginError] = useState('');
   useEffect(() => {
-    if (localStorage.getItem('chat-app-user')) {
+    if (restoreState('chat-app-user', '')) {
       navigate(PATH.CHAT);
     }
   }, []);
@@ -28,7 +29,7 @@ export const Login = () => {
   const onSubmit: SubmitHandler<FormValues> = async values => {
     const { data } = await loginUser(values);
     if (data.status) {
-      localStorage.setItem('chat-app-user', JSON.stringify(data.user));
+      saveState('chat-app-user', data.user);
       navigate(PATH.CHAT);
     } else {
       setLoginError(data.msg);

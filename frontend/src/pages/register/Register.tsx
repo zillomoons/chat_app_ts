@@ -4,7 +4,8 @@ import { PATH } from '../../App';
 import { FormContainer } from './RegisterStyles';
 import logo from '../../assets/logo.svg';
 import { registerUser } from '../../utils/api-routes';
-import { set, SubmitHandler, useForm } from 'react-hook-form';
+import { SubmitHandler, useForm } from 'react-hook-form';
+import { restoreState, saveState } from '../../utils/localStorage';
 
 type FormValues = {
   username: string;
@@ -17,7 +18,7 @@ export const Register = () => {
   const navigate = useNavigate();
   const [registerError, setRegisterError] = useState('');
   useEffect(() => {
-    if (localStorage.getItem('chat-app-user')) {
+    if (restoreState('chat-app-user', '')) {
       navigate(PATH.CHAT);
     }
   }, []);
@@ -30,7 +31,7 @@ export const Register = () => {
   const onSubmit: SubmitHandler<FormValues> = async values => {
     const { data } = await registerUser(values);
     if (data.status) {
-      localStorage.setItem('chat-app-user', JSON.stringify(data.user));
+      saveState('chat-app-user', data.user);
       navigate(PATH.CHAT);
     } else {
       setRegisterError(data.msg);
