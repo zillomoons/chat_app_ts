@@ -33,8 +33,9 @@ export const SetAvatar = () => {
   const setProfileImage = async () => {
     if (selectedAvatar === undefined) {
       setError('Please select an avatar');
-    } else if (userData) {
-      const user = JSON.parse(userData);
+    } else {
+      let user;
+      if (userData) user = JSON.parse(userData);
       const { data } = await setAvatar({
         userId: user._id,
         image: avatars[selectedAvatar],

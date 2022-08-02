@@ -18,9 +18,7 @@ export const Register = () => {
   const navigate = useNavigate();
   const [registerError, setRegisterError] = useState('');
   useEffect(() => {
-    if (restoreState('chat-app-user', '')) {
-      navigate(PATH.CHAT);
-    }
+    restoreState('chat-app-user', '') && navigate(PATH.CHAT);
   }, []);
   const {
     register,
